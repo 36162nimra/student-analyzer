@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Student Performance Report</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f5f0e1; /* light beige */
+            color: #4d3b2b; /* dark brown text */
+        }
+
+        h1 { 
+            text-align: center; 
+            color: #6b4c3b; /* medium brown */
+        }
+
+        h2 { 
+            color: #5a3e2b; /* darker brown */
+            margin-top: 30px; 
+        }
+
+        table { 
+            border-collapse: collapse; 
+            width: 90%; 
+            margin: 15px auto; 
+            background: #fff8f0; /* light beige table background */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        th, td { 
+            border:1px solid #d3bfa2; /* light brown border */
+            padding: 10px; 
+            text-align:center; 
+        }
+
+        th { 
+            background: #a67c52; /* brown header */
+            color: white; 
+        }
+
+        tr:nth-child(even){ background: #f3e6d7; } /* light beige stripe */
+        tr:hover{ background: #e0c8aa; } /* hover effect */
+
+        .chart{ 
+            text-align:center; 
+            margin-bottom:30px; 
+        }
+
+        .chart img {
+            border: 2px solid #a67c52; /* brown border around chart */
+            border-radius: 8px;
+        }
+
+        p {
+            color: #5a3e2b; /* brown for text messages */
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>📊 Student Performance Report</h1>
+
+<h2>Overall Statistics</h2>
+<table>
+<tr>
+<th>Subject</th><th>Mean</th><th>Median</th><th>Mode</th><th>Std Dev</th>
+</tr>
+{% for sub in mean %}
+<tr>
+<td>{{ sub }}</td>
+<td>{{ mean[sub] | round(2) }}</td>
+<td>{{ median[sub] | round(2) }}</td>
+<td>{{ mode[sub] }}</td>
+<td>{{ std[sub] | round(2) }}</td>
+</tr>
+{% endfor %}
+</table>
+
+<h2>Top Students</h2>
+<table>
+<tr>
+{% for key in top[0].keys() %}<th>{{ key }}</th>{% endfor %}
+</tr>
+{% for student in top %}
+<tr>{% for value in student.values() %}<td>{{ value }}</td>{% endfor %}</tr>
+{% endfor %}
+</table>
+
+<h2>Subjects Needing Improvement</h2>
+{% if needs %}
+<table>
+<tr><th>Subject</th><th>Average</th></tr>
+{% for sub, avg in needs.items() %}
+<tr><td>{{ sub }}</td><td>{{ avg | round(2) }}</td></tr>
+{% endfor %}
+</table>
+{% else %}
+<p style="text-align:center;">All subjects are above overall average! ✅</p>
+{% endif %}
+
+<h2>Charts</h2>
+<div class="chart">
+<h3>Math Score Distribution</h3>
+<img src="{{ url_for('static', filename=math_img) }}">
+</div>
+<div class="chart">
+<h3>Mean Score by Subject</h3>
+<img src="{{ url_for('static', filename=mean_img) }}">
+</div>
+
+</body>
+</html>
